@@ -1,5 +1,6 @@
 package com.depromeet.clippingserver.post.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 public class Category {
 
     @Id
