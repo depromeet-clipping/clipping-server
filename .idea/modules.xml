@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/clipping-server.iml" filepath="$PROJECT_DIR$/.idea/clipping-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clipping-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/clipping-server_main.iml" group="clipping-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clipping-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/clipping-server_test.iml" group="clipping-server" />
     </modules>
   </component>
 </project>
