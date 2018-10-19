@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<script src="js/Readability.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/axios.min.js"></script>
+<style type="text/css">
+#app {
+	padding: 1.1em;
+	margin: 0;
+}
+#header {
+	border-bottom: 1px solid black;
+}
+
+#header a, a:visited {
+	text-decoration: none;
+	color: black;
+}
+#header h1{
+	font-size: 1.6em;
+}
+
+div.container{
+	line-height: 1.5em;
+}
+img {
+	max-width: 100%;
+	height: auto;
+}
+</style>
+</head>
+<body>
+	<div id="app">
+		<div>
+			<div id="header">
+				<a :href="url">원 출처</a>
+				<h1 v-text="title"></h1>
+			</div>
+			<div class="container" v-html="content"></div>
+		</div>
+	</div>
+	<script>
+        new Vue({
+            el: '#app',
+            data: { url: '{{&url}}',
+                    title: '',
+                    content: ''
+            },
+            methods: {
+                parsing() {
+                	 let $this = this;
+                	 axios.post('/post', {
+                		 url: this.url
+                	 })
+                     .then(function (response) {
+                    	 let htm = response.data;
+                         var article = document.cloneNode(true);
+                         article.documentElement.innerHTML = htm;
+                         let doc = new Readability(article).parse();
+                         $this.title = doc.title;
+   	                     $this.content = doc.content;
+                     })
+                     .catch(function (error) {
+    					console.log(error);
+    					location.href = $this.url;
+					 })
+                }
+            },
+            created: function(){
+            	this.parsing();
+            }
+        })
+        Vue.config.devtools = true;
+    </script>
+</body>
+
+</html>

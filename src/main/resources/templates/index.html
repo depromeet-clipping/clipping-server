@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="js/vue.min.js"></script>
+</head>
+<body>
+{{#url}} 
+	<a href='/post?url={{{.}}}'>기사보기</a> 
+{{/url}}
+<div id="app">
+	<input v-model="url"/>
+	<button @click="goToPostPage">click me</button>
+</div>
+<script type="text/javascript">
+	new Vue({
+		el: "#app",
+		data: {
+			url: 'http://news.donga.com/Economy/3/all/20181013/92377433/1'
+		},
+		methods: {
+			goToPostPage(){
+				location.href = '/post?url=' + this.url;
+			}
+		}
+	})
+</script>
+</body>
+</html>
