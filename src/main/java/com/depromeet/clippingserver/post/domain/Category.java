@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,6 +41,10 @@ public class Category {
     @JoinColumn(name="user_id")
     private User user;
     
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch=FetchType.LAZY)
     private List<Post> posts;
+
+	public void setOrderNo(int i) {
+		this.orderNo = i;
+	}
 }
