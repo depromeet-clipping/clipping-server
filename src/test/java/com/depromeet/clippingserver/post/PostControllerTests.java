@@ -57,11 +57,11 @@ public class PostControllerTests {
         // when-then
         mvc.perform(get(GET_POST_ENDPOINT))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(posts.size())))
-                .andExpect(jsonPath("$[0].title").value(title1))
-                .andExpect(jsonPath("$[0].url").value(url1))
-                .andExpect(jsonPath("$[1].title").value(title2))
-                .andExpect(jsonPath("$[1].url").value(url2))
+                .andExpect(jsonPath("$.posts", hasSize(posts.size())))
+                .andExpect(jsonPath("$.posts[0].title").value(title1))
+                .andExpect(jsonPath("$.posts[0].url").value(url1))
+                .andExpect(jsonPath("$.posts[1].title").value(title2))
+                .andExpect(jsonPath("$.posts[1].url").value(url2))
                 .andDo(print());
     }
 }

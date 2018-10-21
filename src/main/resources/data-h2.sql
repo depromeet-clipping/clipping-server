@@ -1,0 +1,1 @@
+insert into post (post_id, category_id, comment, deleted, is_bookmark, source_of, title, url, user_id) values(null, null,'한국인',  FALSE, FALSE, 'naver', '한국인',  'hankook.com', null)
