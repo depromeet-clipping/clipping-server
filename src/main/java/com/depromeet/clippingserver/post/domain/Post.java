@@ -1,5 +1,6 @@
 package com.depromeet.clippingserver.post.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Builder
 public class Post {
 
     @Id

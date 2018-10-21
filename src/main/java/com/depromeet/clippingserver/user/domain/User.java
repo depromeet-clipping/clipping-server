@@ -2,6 +2,7 @@ package com.depromeet.clippingserver.user.domain;
 
 import com.depromeet.clippingserver.post.domain.Category;
 import com.depromeet.clippingserver.post.domain.Post;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 public class User {
 
     @Id
