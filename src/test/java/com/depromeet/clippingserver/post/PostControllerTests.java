@@ -2,6 +2,7 @@ package com.depromeet.clippingserver.post;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +20,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.depromeet.clippingserver.exception.UserNotFoundException;
 import com.depromeet.clippingserver.post.domain.Post;
 import com.depromeet.clippingserver.post.domain.PostRepository;
 import com.depromeet.clippingserver.post.web.PostController;
+import com.depromeet.clippingserver.user.domain.User;
+import com.depromeet.clippingserver.user.domain.UserRepository;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(PostController.class)
@@ -31,6 +36,9 @@ public class PostControllerTests {
 
     @MockBean
     private PostRepository postRepository;
+    
+    @MockBean
+    private UserRepository userRepository;
 
     private static final String GET_POST_ENDPOINT = "/posts";
 
@@ -57,7 +65,8 @@ public class PostControllerTests {
                 .build());
 
         given(postRepository.findByUserId(USER_ID)).willReturn(posts);
-
+        given(userRepository.findById(USER_ID)).willReturn(Optional.ofNullable(User.builder().build()));
+        
         // when-then
         mvc.perform(get(GET_POST_ENDPOINT).header("UserId", USER_ID))
                 .andExpect(status().isOk())
@@ -67,5 +76,15 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.posts[1].title").value(title2))
                 .andExpect(jsonPath("$.posts[1].url").value(url2))
                 .andDo(print());
+    }
+    
+    @Test(expected=UserNotFoundException.class)
+    public void getPostExpectUserNotFound() throws Exception {
+        // given
+    	final Long USER_ID = 1L;
+        
+        // when-then
+    	doThrow(UserNotFoundException.class).when(userRepository).findById(USER_ID);
+       	userRepository.findById(USER_ID);
     }
 }
