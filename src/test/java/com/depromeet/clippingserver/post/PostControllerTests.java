@@ -37,13 +37,15 @@ public class PostControllerTests {
     @Test
     public void getPost() throws Exception {
         // given
+    	final Long USER_ID = 1L;
         List<Post> posts = new ArrayList<>();
-
+        
         final String title1 = "Clipping Server Github";
         final String url1 = "https://github.com/depromeet-clipping/clipping-server";
         posts.add(Post.builder()
                 .title(title1)
                 .url(url1)
+                .userId(USER_ID)
                 .build());
 
         final String title2 = "Depromeet Github";
@@ -51,12 +53,13 @@ public class PostControllerTests {
         posts.add(Post.builder()
                 .title(title2)
                 .url(url2)
+                .userId(USER_ID)
                 .build());
 
-        given(postRepository.findAll()).willReturn(posts);
+        given(postRepository.findByUserId(USER_ID)).willReturn(posts);
 
         // when-then
-        mvc.perform(get(GET_POST_ENDPOINT))
+        mvc.perform(get(GET_POST_ENDPOINT).header("UserId", USER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.posts", hasSize(posts.size())))
                 .andExpect(jsonPath("$.posts[0].title").value(title1))
