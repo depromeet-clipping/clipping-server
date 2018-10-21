@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.depromeet.clippingserver.post.domain.Category;
 import com.depromeet.clippingserver.post.domain.Post;
 
 import lombok.AllArgsConstructor;
@@ -30,9 +29,6 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String deviceKey;
-
-    @OneToMany
-    private List<Category> categories;
 
     @OneToMany(mappedBy = "userId")
     private List<Post> posts;
