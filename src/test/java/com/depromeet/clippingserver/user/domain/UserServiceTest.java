@@ -7,11 +7,13 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest @Transactional
 public class UserServiceTest {
 
 	@Autowired
@@ -20,8 +22,11 @@ public class UserServiceTest {
 	@Autowired
 	private UserRepository userRepository;
 	
-	final String INVALID_DEVICE_KEY = "$#%88974";
-	final String DEVICE_KEY = "#$9981";
+	@Value("${test.invalid_device_key}")
+	String INVALID_DEVICE_KEY;
+	
+	@Value("${test.device_key}")
+	String DEVICE_KEY;
 	
 	@Test
 	public void testExistUserJoin() {
