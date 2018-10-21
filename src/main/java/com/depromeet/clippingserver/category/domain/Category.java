@@ -1,4 +1,4 @@
-package com.depromeet.clippingserver.post.domain;
+package com.depromeet.clippingserver.category.domain;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.depromeet.clippingserver.post.domain.Post;
 import com.depromeet.clippingserver.user.domain.User;
 
 import lombok.AllArgsConstructor;

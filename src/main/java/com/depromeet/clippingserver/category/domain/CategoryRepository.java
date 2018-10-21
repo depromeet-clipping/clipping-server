@@ -1,4 +1,4 @@
-package com.depromeet.clippingserver.post.domain;
+package com.depromeet.clippingserver.category.domain;
 
 import java.util.ArrayList;
 import java.util.Optional;

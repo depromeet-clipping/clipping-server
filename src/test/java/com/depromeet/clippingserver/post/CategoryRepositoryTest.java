@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.depromeet.clippingserver.post.domain.Category;
-import com.depromeet.clippingserver.post.domain.CategoryRepository;
+import com.depromeet.clippingserver.category.domain.Category;
+import com.depromeet.clippingserver.category.domain.CategoryRepository;
 import com.depromeet.clippingserver.user.domain.User;
 
 @RunWith(SpringRunner.class)
