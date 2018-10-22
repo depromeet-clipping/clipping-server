@@ -3,6 +3,7 @@ package com.depromeet.clippingserver.category.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,11 +44,18 @@ public class Category {
     @JoinColumn(name="user_id")
     private User user;
     
-    @OneToMany(mappedBy = "category", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @Builder.Default
     private List<Post> posts = new ArrayList<>();
 
 	public void setOrderNo(int i) {
 		this.orderNo = i;
+	}
+
+	public void addPost(Post post) {
+		if(!this.posts.contains(post)){
+			this.posts.add(post);
+		}
+		post.addCategory(this);
 	}
 }

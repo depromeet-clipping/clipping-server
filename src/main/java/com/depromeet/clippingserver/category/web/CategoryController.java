@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.depromeet.clippingserver.category.domain.CategoryDto;
 import com.depromeet.clippingserver.category.domain.CategoryService;
+import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
 
 @RestController
 public class CategoryController {
@@ -26,6 +27,12 @@ public class CategoryController {
 	@GetMapping(path = "/categories")
 	public ResponseEntity<List<CategoryDto>> getCategories(@RequestHeader(value = "UserId") Long userId) {
 		List<CategoryDto> re = categoryService.findValidAndOrderedCategory(userId);
+		return ResponseEntity.ok().body(re);
+	}
+	
+	@GetMapping(path ="/categories/{categoryId}/posts")
+	public ResponseEntity<GetAllPostsResponse> getPostsUsingCategoryId(@RequestHeader(value = "UserId") Long userId, @PathVariable(name="categoryId") Long categoryId){
+		GetAllPostsResponse re = categoryService.findParticularPosts(categoryId, userId);
 		return ResponseEntity.ok().body(re);
 	}
 

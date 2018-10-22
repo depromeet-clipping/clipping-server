@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.FixMethodOrder;
@@ -20,15 +21,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.category.domain.CategoryRepository;
+import com.depromeet.clippingserver.category.domain.CategoryService;
+import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
+import com.depromeet.clippingserver.post.domain.Post;
+import com.depromeet.clippingserver.post.domain.PostRepository;
 import com.depromeet.clippingserver.user.domain.User;
 
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest @ActiveProfiles("test")
+@SpringBootTest
+@ActiveProfiles("test")
 public class CategoryRepositoryTest {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private CategoryService categoryService;
+
+	@Autowired
+	private PostRepository postRepository;
 
 	final Long USER_ID = 1L;
 
@@ -103,5 +115,38 @@ public class CategoryRepositoryTest {
 
 		Integer findMaxOrderNo = categoryRepository.findMaxOrderNoByUserId(1L).orElse(0);
 		assertEquals(true, findMaxOrderNo.equals(1000));
+	}
+
+	@Test
+	public void e_testFindParticularPosts() {
+		// given
+		ArrayList<Post> posts = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			posts.add(Post.builder().title("title").url("naver.com").comment("한국").sourceOf("naver").userId(USER_ID)
+					.build());
+		}
+		Category category = Category.builder().name("연예기사").orderNo(1).user(User.builder().id(USER_ID).build()).build();
+		posts.forEach( post ->
+				category.addPost(post)
+		);
+		categoryRepository.save(category);
+		
+		List<Post> testPosts = postRepository.findByUserId(USER_ID).stream()
+				.filter( post -> {
+					Optional<Category> opt = Optional.ofNullable(post.getCategory());
+					if(opt.isPresent()) {
+						return opt.get().getId().equals(1L);
+					}else {
+						return false;
+					}
+				}).sorted(Comparator.comparing(Post::getUpdatedDate).reversed()).collect(Collectors.toList());
+
+		// when
+		GetAllPostsResponse postDtos = categoryService.findParticularPosts(1L, USER_ID);
+
+		// then
+		for(int i = 0; i < testPosts.size(); i++) {
+			assertEquals(testPosts.get(i).getId(), postDtos.getPosts().get(i).getId());
+		}
 	}
 }

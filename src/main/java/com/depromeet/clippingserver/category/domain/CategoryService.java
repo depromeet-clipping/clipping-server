@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.depromeet.clippingserver.exception.CategoryNotFoundException;
+import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
+import com.depromeet.clippingserver.post.domain.Post;
 import com.depromeet.clippingserver.user.domain.User;
 
-@Service @Transactional
+@Service
+@Transactional
 public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -22,24 +25,25 @@ public class CategoryService {
 
 	public CategoryDto saveNewCategory(CategoryDto dto, Long userId) {
 		Integer maxOrderNo = categoryRepository.findMaxOrderNoByUserId(userId).orElse(0);
-		Category category = Category.builder()
-									.name(dto.getName())
-									.orderNo(maxOrderNo + 1)
-									.user(User.builder().id(userId).build())
-									.build();
+		Category category = Category.builder().name(dto.getName()).orderNo(maxOrderNo + 1)
+				.user(User.builder().id(userId).build()).build();
 		category = categoryRepository.save(category);
 		return CategoryDto.fromEntity(category);
 	}
 
 	public List<CategoryDto> updateOrderNo(Long userId, List<CategoryDto> category) {
-		category.forEach( dto ->
-				 categoryRepository.updateOrderNoById(dto.getOrderNo(), dto.getId()) 
-		);
+		category.forEach(dto -> categoryRepository.updateOrderNoById(dto.getOrderNo(), dto.getId()));
 		return this.findValidAndOrderedCategory(userId);
 	}
 
 	public void updateDeletedTrue(Long categoryId) {
 		categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
 		categoryRepository.updateDeletedTrue(categoryId);
+	}
+
+	public GetAllPostsResponse findParticularPosts(long categoryId, Long userId) {
+		categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
+		List<Post> posts = categoryRepository.findPostsByIdAndUserId(categoryId, userId);
+		return GetAllPostsResponse.fromEntity(posts);
 	}
 }
