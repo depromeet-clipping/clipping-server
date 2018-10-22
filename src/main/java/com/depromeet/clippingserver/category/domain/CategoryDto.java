@@ -1,7 +1,5 @@
 package com.depromeet.clippingserver.category.domain;
 
-import java.util.Optional;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

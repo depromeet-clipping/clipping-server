@@ -3,6 +3,7 @@ package com.depromeet.clippingserver.category.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +34,9 @@ public class CategoryController {
 	}
 
 	@PutMapping(path = "/categories")
-	public ResponseEntity<String> updateCategory() {
-		return null;
+	public ResponseEntity<List<CategoryDto>> updateCategory(@RequestHeader(value = "UserId") Long userId,@RequestBody List<CategoryDto> category) {
+		category = categoryService.updateOrderNo(userId, category);
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(category);
 	}
 
 	@DeleteMapping(path = "/categories")

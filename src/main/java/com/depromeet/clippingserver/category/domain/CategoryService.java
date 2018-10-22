@@ -5,10 +5,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.depromeet.clippingserver.user.domain.User;
 
-@Service
+@Service @Transactional
 public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -27,5 +28,12 @@ public class CategoryService {
 									.build();
 		category = categoryRepository.save(category);
 		return CategoryDto.fromEntity(category);
+	}
+
+	public List<CategoryDto> updateOrderNo(Long userId, List<CategoryDto> category) {
+		category.forEach( dto ->
+				 categoryRepository.updateOrderNoById(dto.getOrderNo(), dto.getId()) 
+		);
+		return this.findValidAndOrderedCategory(userId);
 	}
 }
