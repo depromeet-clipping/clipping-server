@@ -30,7 +30,7 @@ public class CategoryController {
 	}
 
 	@PostMapping(path = "/categories")
-	public ResponseEntity<CategoryDto> createCategory(@RequestHeader(value = "UserId") Long userId,@RequestBody CategoryDto category) {
+	public ResponseEntity<CategoryDto> createCategory(@RequestHeader(value = "UserId") Long userId, @RequestBody CategoryDto category) {
 		CategoryDto re = categoryService.saveNewCategory(category, userId);
 		return ResponseEntity.status(HttpStatus.CREATED).body(re);
 	}
