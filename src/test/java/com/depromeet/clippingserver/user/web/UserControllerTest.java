@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -19,6 +20,7 @@ import com.depromeet.clippingserver.user.domain.UserService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
+@ActiveProfiles("test")
 public class UserControllerTest {
 	@Autowired
 	private MockMvc mvc;

@@ -1,4 +1,4 @@
-package com.depromeet.clippingserver.post;
+package com.depromeet.clippingserver.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -15,15 +15,16 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.depromeet.clippingserver.post.domain.Category;
-import com.depromeet.clippingserver.post.domain.CategoryRepository;
+import com.depromeet.clippingserver.category.domain.Category;
+import com.depromeet.clippingserver.category.domain.CategoryRepository;
 import com.depromeet.clippingserver.user.domain.User;
 
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SpringBootTest
+@SpringBootTest @ActiveProfiles("test")
 public class CategoryRepositoryTest {
 
 	@Autowired
@@ -52,7 +53,7 @@ public class CategoryRepositoryTest {
 		Category[] categoryArr = { Category.builder().id(2L).orderNo(1).build(),
 				Category.builder().id(3L).orderNo(2).build(), Category.builder().id(5L).orderNo(5).build(),
 				Category.builder().id(1L).orderNo(8).build(), Category.builder().id(7L).orderNo(3).build(),
-				Category.builder().id(4L).orderNo(4).build(), Category.builder().id(8L).orderNo(11).build(),
+				Category.builder().id(4L).orderNo(4).build(), Category.builder().id(8L).orderNo(2).build(),
 				Category.builder().id(6L).orderNo(6).build(), Category.builder().id(9L).orderNo(7).build(),
 				Category.builder().id(10L).orderNo(10).build() };
 
@@ -62,7 +63,7 @@ public class CategoryRepositoryTest {
 
 		Integer findMaxOrderNo = categoryRepository.findMaxOrderNoByUserId(USER_ID).orElse(0);
 
-		categories = categoryRepository.findByUserIdOrderByOrderNoAsc(USER_ID);
+		categories = categoryRepository.findByUserIdAndDeletedFalseOrderByOrderNoAsc(USER_ID);
 		List<Category> tmp = Arrays.stream(categoryArr).sorted(Comparator.comparing(Category::getOrderNo))
 				.collect(Collectors.toList());
 
@@ -72,7 +73,7 @@ public class CategoryRepositoryTest {
 			assertThat(categories.get(i).getOrderNo()).isEqualTo(tmp.get(i).getOrderNo());
 		}
 
-		assertEquals("orderNo의 최대값이 일치하지 않습니다", true, findMaxOrderNo.equals(11));
+		assertEquals("orderNo의 최대값이 일치하지 않습니다", true, findMaxOrderNo.equals(10));
 		assertEquals("2번째 정렬된 카테고리가 제대로 정렬되지 않았습니다.", true, categories.get(1).getId().equals(3L));
 	}
 

@@ -1,4 +1,4 @@
-package com.depromeet.clippingserver.post.domain;
+package com.depromeet.clippingserver.category.domain;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -22,4 +22,11 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	public ArrayList<Category> findByUserIdOrderByOrderNoAsc(Long id);
 
 	public ArrayList<Category> findByUserId(Long id);
+
+	public ArrayList<Category> findByUserIdAndDeletedFalseOrderByOrderNoAsc(Long id);
+	
+	@Modifying
+	@Transactional
+	@Query("update Category c set c.deleted = true where c.id = :id")
+	public void updateDeletedTrue(@Param("id") Long id);
 }

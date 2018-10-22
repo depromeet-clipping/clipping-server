@@ -1,3 +1,5 @@
 insert into user(user_id, device_key) values(1, '#$9981')
-insert into post (post_id, category_id, comment, deleted, is_bookmark, source_of, title, url, user_id) values(null, null,'한국인1',  FALSE, FALSE, 'naver1', '한국인1',  'hankook.com', 1)
-insert into post (post_id, category_id, comment, deleted, is_bookmark, source_of, title, url, user_id) values(null, null,'한국인2',  FALSE, FALSE, 'naver2', '한국인2',  'hankook.com', 1)
+insert into category (category_id, deleted, name, order_no, user_id) values (null, FALSE, '사회', 1, 1)
+insert into category (category_id, deleted, name, order_no, user_id) values (null, FALSE, '사회3', 2, 1)
+insert into post (post_id, category_id, comment, deleted, is_bookmark, source_of, title, url, user_id) values(null, 1,'한국인1',  FALSE, FALSE, 'naver1', '한국인1',  'hankook.com', 1)
+insert into post (post_id, category_id, comment, deleted, is_bookmark, source_of, title, url, user_id) values(null, 1,'한국인2',  FALSE, TRUE, 'naver2', '한국인2',  'hankook.com', 1)
