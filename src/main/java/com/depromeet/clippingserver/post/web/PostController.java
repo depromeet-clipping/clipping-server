@@ -22,6 +22,6 @@ public class PostController {
     @GetMapping
     public GetAllPostsResponse getAllPosts(@RequestHeader(value="UserID") Long userId) throws Exception{
     	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return GetAllPostsResponse.fromEntity(postRepository.findByUserId(userId));
+        return GetAllPostsResponse.fromEntity(postRepository.findByUserIdOrderByUpdatedDateDesc(userId));
     }
 }

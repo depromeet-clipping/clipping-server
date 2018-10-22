@@ -64,7 +64,7 @@ public class PostControllerTests {
                 .userId(USER_ID)
                 .build());
 
-        given(postRepository.findByUserId(USER_ID)).willReturn(posts);
+        given(postRepository.findByUserIdOrderByUpdatedDateDesc(USER_ID)).willReturn(posts);
         given(userRepository.findById(USER_ID)).willReturn(Optional.ofNullable(User.builder().build()));
         
         // when-then

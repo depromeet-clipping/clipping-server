@@ -43,6 +43,7 @@ public class Post {
 
 	private String comment;
 	private String sourceOf;
+	private String thumbnailImgLink;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
