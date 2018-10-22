@@ -15,4 +15,9 @@ public class ExceptionController {
 	public String handleUserNotFound(UserNotFoundException e) {
 		return e.getMessage();
 	}
+	@ResponseStatus(code=HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value=CategoryNotFoundException.class)
+	public String handleCategoryNotFound(CategoryNotFoundException e) {
+		return e.getMessage();
+	}
 }

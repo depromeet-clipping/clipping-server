@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.depromeet.clippingserver.exception.CategoryNotFoundException;
 import com.depromeet.clippingserver.user.domain.User;
 
 @Service @Transactional
@@ -35,5 +36,10 @@ public class CategoryService {
 				 categoryRepository.updateOrderNoById(dto.getOrderNo(), dto.getId()) 
 		);
 		return this.findValidAndOrderedCategory(userId);
+	}
+
+	public void updateDeletedTrue(Long categoryId) {
+		categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
+		categoryRepository.updateDeletedTrue(categoryId);
 	}
 }

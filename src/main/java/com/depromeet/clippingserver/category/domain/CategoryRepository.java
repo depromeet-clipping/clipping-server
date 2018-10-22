@@ -24,4 +24,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	public ArrayList<Category> findByUserId(Long id);
 
 	public ArrayList<Category> findByUserIdAndDeletedFalseOrderByOrderNoAsc(Long id);
+	
+	@Modifying
+	@Transactional
+	@Query("update Category c set c.deleted = true where c.id = :id")
+	public void updateDeletedTrue(@Param("id") Long id);
 }
