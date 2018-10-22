@@ -1,5 +1,6 @@
 package com.depromeet.clippingserver.category.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -43,7 +44,8 @@ public class Category {
     private User user;
     
     @OneToMany(mappedBy = "category", fetch=FetchType.LAZY)
-    private List<Post> posts;
+    @Builder.Default
+    private List<Post> posts = new ArrayList<>();
 
 	public void setOrderNo(int i) {
 		this.orderNo = i;

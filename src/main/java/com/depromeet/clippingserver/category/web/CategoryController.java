@@ -1,37 +1,44 @@
 package com.depromeet.clippingserver.category.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.depromeet.clippingserver.category.domain.CategoryRepository;
+import com.depromeet.clippingserver.category.domain.CategoryDto;
+import com.depromeet.clippingserver.category.domain.CategoryService;
 
 @RestController
 public class CategoryController {
 	@Autowired
-	private CategoryRepository categoryRepository;
-	
-	@GetMapping(path="/categories")
-	public ResponseEntity<String> getCategories(){
+	private CategoryService categoryService;
+
+	@GetMapping(path = "/categories")
+	public ResponseEntity<List<CategoryDto>> getCategories(@RequestHeader(value = "UserId") Long userId) {
+		List<CategoryDto> re = categoryService.findValidAndOrderedCategory(userId);
+		return ResponseEntity.ok().body(re);
+	}
+
+	@PostMapping(path = "/categories")
+	public ResponseEntity<CategoryDto> createCategory(@RequestHeader(value = "UserId") Long userId,@RequestBody CategoryDto category) {
+		CategoryDto re = categoryService.saveNewCategory(category, userId);
+		return ResponseEntity.ok().body(re);
+	}
+
+	@PutMapping(path = "/categories")
+	public ResponseEntity<String> updateCategory() {
 		return null;
 	}
-	
-	@PostMapping(path="/categories")
-	public ResponseEntity<String> createCategory(){
-		return null;
-	}
-	
-	@PutMapping(path="/categories")
-	public ResponseEntity<String> updateCategory(){
-		return null;
-	}
-	
-	@DeleteMapping(path="/categories")
-	public ResponseEntity<String> deleteCategory(){
+
+	@DeleteMapping(path = "/categories")
+	public ResponseEntity<String> deleteCategory() {
 		return null;
 	}
 }

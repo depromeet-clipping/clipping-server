@@ -22,4 +22,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	public ArrayList<Category> findByUserIdOrderByOrderNoAsc(Long id);
 
 	public ArrayList<Category> findByUserId(Long id);
+
+	public ArrayList<Category> findByUserIdAndDeletedFalseOrderByOrderNoAsc(Long id);
 }

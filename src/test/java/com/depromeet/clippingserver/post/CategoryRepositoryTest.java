@@ -52,7 +52,7 @@ public class CategoryRepositoryTest {
 		Category[] categoryArr = { Category.builder().id(2L).orderNo(1).build(),
 				Category.builder().id(3L).orderNo(2).build(), Category.builder().id(5L).orderNo(5).build(),
 				Category.builder().id(1L).orderNo(8).build(), Category.builder().id(7L).orderNo(3).build(),
-				Category.builder().id(4L).orderNo(4).build(), Category.builder().id(8L).orderNo(11).build(),
+				Category.builder().id(4L).orderNo(4).build(), Category.builder().id(8L).orderNo(2).build(),
 				Category.builder().id(6L).orderNo(6).build(), Category.builder().id(9L).orderNo(7).build(),
 				Category.builder().id(10L).orderNo(10).build() };
 
@@ -62,7 +62,7 @@ public class CategoryRepositoryTest {
 
 		Integer findMaxOrderNo = categoryRepository.findMaxOrderNoByUserId(USER_ID).orElse(0);
 
-		categories = categoryRepository.findByUserIdOrderByOrderNoAsc(USER_ID);
+		categories = categoryRepository.findByUserIdAndDeletedFalseOrderByOrderNoAsc(USER_ID);
 		List<Category> tmp = Arrays.stream(categoryArr).sorted(Comparator.comparing(Category::getOrderNo))
 				.collect(Collectors.toList());
 
