@@ -10,11 +10,15 @@ import org.jsoup.nodes.Element;
 import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostDto {
 
 	private Long id;
@@ -33,6 +37,7 @@ public class PostDto {
 		Optional<Category> categoryopt = Optional.ofNullable(post.getCategory());
 		CategoryDto categorydto = categoryopt.map(CategoryDto::fromEntity).orElse(null);
 		return PostDto.builder().id(post.getId()).title(post.getTitle()).url(post.getUrl()).comment(post.getComment())
+				.thumnailLink(post.getThumbnailImgLink())
 				.sourceOf(post.getSourceOf()).isBookmark(post.isBookmark()).category(categorydto)
 				.createdDate(post.getCreatedDate()).updatedDate(post.getUpdatedDate()).build();
 	}

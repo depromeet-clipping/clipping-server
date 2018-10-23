@@ -19,8 +19,12 @@ public class PostService {
 		Post post = Post.builder().comment(postDto.getComment()).url(url).sourceOf(postDto.getSourceOf())
 				.category(Category.builder().id(postDto.getCategory().getId()).build())
 				.thumbnailImgLink(postDto.getThumnailLink()).title(postDto.getTitle()).userId(userId).build();
-		postRepository.save(post);
-		return postDto;
+		Post re = postRepository.save(post);
+		return PostDto.fromEntity(re);
+	}
+
+	public GetAllPostsResponse findAllPostsOrdered(Long userId) {
+		return GetAllPostsResponse.fromEntity(postRepository.findByUserIdOrderByUpdatedDateDesc(userId));
 	}
 
 }
