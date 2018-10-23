@@ -1,6 +1,7 @@
 package com.depromeet.clippingserver.post.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +29,9 @@ public class PostController {
     private UserRepository userRepository;
 
     @GetMapping
-    public GetAllPostsResponse getAllPosts(@RequestHeader(value="UserID") Long userId) throws Exception{
+    public GetAllPostsResponse getAllPosts(@RequestHeader(value="UserID") Long userId,String keyword, Pageable pageable) throws Exception{
     	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return postService.findAllPostsOrdered(userId);
+        return postService.searchPost(userId, keyword, pageable);
     }
     
     @PostMapping

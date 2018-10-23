@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -131,7 +132,8 @@ public class CategoryRepositoryTest {
 		);
 		categoryRepository.save(category);
 		
-		List<Post> testPosts = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(USER_ID).stream()
+		
+		List<Post> testPosts = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(USER_ID, PageRequest.of(0, 100)).stream()
 				.filter( post -> {
 					Optional<Category> opt = Optional.ofNullable(post.getCategory());
 					if(opt.isPresent()) {

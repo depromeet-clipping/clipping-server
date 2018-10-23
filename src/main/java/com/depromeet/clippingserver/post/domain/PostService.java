@@ -1,11 +1,12 @@
 package com.depromeet.clippingserver.post.domain;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,11 @@ public class PostService {
 		return PostDto.fromEntity(re);
 	}
 
-	public GetAllPostsResponse findAllPostsOrdered(Long userId) {
-		return GetAllPostsResponse.fromEntity(postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId));
+	public GetAllPostsResponse findAllPostsOrdered(Long userId, Pageable pageable) {
+		Page<Post> post = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId, pageable);
+		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(post.getContent());
+		re.addPageInfo(post);
+		return re;
 	}
 
 	public PostDto modifyPostCategoryId(Long postId, Long categoryId) {
@@ -48,17 +52,19 @@ public class PostService {
 		postRepository.updateDeletedTrue(postId);
 	}
 
-	public GetAllPostsResponse searchPost(Long userId, String keyword) {
-		List<Post> re;
+	public GetAllPostsResponse searchPost(Long userId, String keyword, Pageable pageable) {
+		Page<Post> post;
 		if(keyword == null || keyword.equals("")) {
-			re = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId);
+			post = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId, pageable);
 		}else {
-			re = postRepository.findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(userId, keyword, keyword);
-			if(re.size() == 0) {
-				re = postRepository.findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(userId, keyword, keyword);	
+			post = postRepository.findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(userId, keyword, keyword, pageable);
+			if(post.getSize() == 0) {
+				post = postRepository.findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(userId, keyword, keyword, pageable);	
 			}
 		}
-		return GetAllPostsResponse.fromEntity(re);
+		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(post.getContent());
+		re.addPageInfo(post);
+		return re;
 	}
 
 }

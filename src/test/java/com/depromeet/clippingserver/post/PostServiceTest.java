@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -49,10 +50,11 @@ public class PostServiceTest {
 	
 	@Test
 	public void testSearchPost() {
+		PageRequest pageReq = PageRequest.of(0, 5);
 		Long userId = 1L;
-		String keyword = "한국인";
-		GetAllPostsResponse posts = postService.searchPost(userId, keyword);
-		assertEquals(2, posts.getPosts().size());
+		String keyword = "";
+		GetAllPostsResponse posts = postService.searchPost(userId, keyword, pageReq);
+		assertEquals(5, posts.getPosts().size());
 	}
 	
 	@Test
