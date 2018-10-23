@@ -144,7 +144,7 @@ public class CategoryRepositoryTest {
 				}).sorted(Comparator.comparing(Post::getUpdatedDate).reversed()).collect(Collectors.toList());
 
 		// when
-		GetAllPostsResponse postDtos = categoryService.findParticularPosts(1L, USER_ID);
+		GetAllPostsResponse postDtos = categoryService.findParticularPosts(1L, USER_ID, PageRequest.of(0, 100));
 
 		// then
 		for(int i = 0; i < testPosts.size(); i++) {

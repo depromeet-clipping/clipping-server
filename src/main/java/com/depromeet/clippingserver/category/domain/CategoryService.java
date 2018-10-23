@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +43,11 @@ public class CategoryService {
 		categoryRepository.updateDeletedTrue(categoryId);
 	}
 
-	public GetAllPostsResponse findParticularPosts(long categoryId, Long userId) {
+	public GetAllPostsResponse findParticularPosts(long categoryId, Long userId, Pageable pageable) {
 		categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
-		List<Post> posts = categoryRepository.findPostsByIdAndUserId(categoryId, userId);
-		return GetAllPostsResponse.fromEntity(posts);
+		Page<Post> posts = categoryRepository.findPostsByIdAndUserId(categoryId, userId, pageable);
+		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(posts.getContent());
+		re.addPageInfo(posts);
+		return re;
 	}
 }

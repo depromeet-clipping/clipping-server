@@ -1,9 +1,10 @@
 package com.depromeet.clippingserver.category.domain;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,7 +25,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	public Optional<Integer> findMaxOrderNoByUserId(@Param("userId") Long userId);
 
 	@Query("select p from Category c inner join c.posts p where c.id = :id and c.user.id = :userId and p.deleted = false order by p.updatedDate DESC")
-	public List<Post> findPostsByIdAndUserId(@Param("id") long id, @Param("userId") Long userId);
+	public Page<Post> findPostsByIdAndUserId(@Param("id") long id, @Param("userId") Long userId,Pageable pageable);
 
 	@Modifying
 	@Transactional

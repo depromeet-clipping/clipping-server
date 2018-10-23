@@ -27,8 +27,8 @@ public class GetAllPostsResponse {
     }
 
 	public void addPageInfo(Page<Post> post) {
-		this.currentPageNum = post.getNumber();
-		this.totalPageSize = post.getTotalPages();
+		this.currentPageNum = post.getNumber() + 1;
+		this.totalPageSize = post.getTotalPages() + 1;
 		this.hasNextPage = post.hasNext();
 		this.hasPriviousPage = post.hasPrevious();
 		this.isLastPage = post.isLast();

@@ -3,6 +3,7 @@ package com.depromeet.clippingserver.category.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,10 @@ public class CategoryController {
 	}
 	
 	@GetMapping(path ="/categories/{categoryId}/posts")
-	public ResponseEntity<GetAllPostsResponse> getPostsUsingCategoryId(@RequestHeader(value = "UserId") Long userId, @PathVariable(name="categoryId") Long categoryId){
-		GetAllPostsResponse re = categoryService.findParticularPosts(categoryId, userId);
+	public ResponseEntity<GetAllPostsResponse> getPostsUsingCategoryId(@RequestHeader(value = "UserId") Long userId, 
+																	    @PathVariable(name="categoryId") Long categoryId,
+																	    Pageable pageable){
+		GetAllPostsResponse re = categoryService.findParticularPosts(categoryId, userId, pageable);
 		return ResponseEntity.ok().body(re);
 	}
 
