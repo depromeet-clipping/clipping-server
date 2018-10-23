@@ -21,8 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.depromeet.clippingserver.exception.UserNotFoundException;
+import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
 import com.depromeet.clippingserver.post.domain.Post;
-import com.depromeet.clippingserver.post.domain.PostRepository;
+import com.depromeet.clippingserver.post.domain.PostService;
 import com.depromeet.clippingserver.post.web.PostController;
 import com.depromeet.clippingserver.user.domain.User;
 import com.depromeet.clippingserver.user.domain.UserRepository;
@@ -35,7 +36,7 @@ public class PostControllerTests {
     private MockMvc mvc;
 
     @MockBean
-    private PostRepository postRepository;
+    private PostService postService;
     
     @MockBean
     private UserRepository userRepository;
@@ -64,7 +65,7 @@ public class PostControllerTests {
                 .userId(USER_ID)
                 .build());
 
-        given(postRepository.findByUserId(USER_ID)).willReturn(posts);
+        given(postService.findAllPostsOrdered(USER_ID)).willReturn(GetAllPostsResponse.fromEntity(posts));
         given(userRepository.findById(USER_ID)).willReturn(Optional.ofNullable(User.builder().build()));
         
         // when-then

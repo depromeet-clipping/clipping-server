@@ -13,7 +13,7 @@ public class GetAllPostsResponse {
     public static GetAllPostsResponse fromEntity(List<Post> posts) {
         return GetAllPostsResponse.builder()
                 .posts(posts.stream()
-                        .map(post -> PostDto.fromEntity(post))
+                        .map(PostDto::fromEntity)
                         .collect(Collectors.toList()))
                 .build();
     }
