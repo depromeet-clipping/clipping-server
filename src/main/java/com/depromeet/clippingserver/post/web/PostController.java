@@ -2,6 +2,7 @@ package com.depromeet.clippingserver.post.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,5 +44,11 @@ public class PostController {
     public ResponseEntity<PostDto> modifyPostCategory(@PathVariable(name="postId") Long postId, @RequestBody CategoryDto category){
     	PostDto re = postService.modifyPostCategoryId(postId, category.getId());
     	return ResponseEntity.ok().body(re);
+    }
+    
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable(name="postId") Long postId){
+    	postService.deletePostOne(postId);
+    	return ResponseEntity.ok().body("delete success!");
     }
 }

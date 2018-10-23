@@ -29,7 +29,7 @@ public class PostService {
 	}
 
 	public GetAllPostsResponse findAllPostsOrdered(Long userId) {
-		return GetAllPostsResponse.fromEntity(postRepository.findByUserIdOrderByUpdatedDateDesc(userId));
+		return GetAllPostsResponse.fromEntity(postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId));
 	}
 
 	public PostDto modifyPostCategoryId(Long postId, Long categoryId) {
@@ -40,6 +40,11 @@ public class PostService {
 		}
 		Optional<Post> post = postRepository.findById(postId);
 		return PostDto.fromEntity(post.orElseThrow(PostNotFoundException::new));
+	}
+
+	public void deletePostOne(Long postId) {
+		postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+		postRepository.updateDeletedTrue(postId);
 	}
 
 }

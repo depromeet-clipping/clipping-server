@@ -131,7 +131,7 @@ public class CategoryRepositoryTest {
 		);
 		categoryRepository.save(category);
 		
-		List<Post> testPosts = postRepository.findByUserIdOrderByUpdatedDateDesc(USER_ID).stream()
+		List<Post> testPosts = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(USER_ID).stream()
 				.filter( post -> {
 					Optional<Category> opt = Optional.ofNullable(post.getCategory());
 					if(opt.isPresent()) {

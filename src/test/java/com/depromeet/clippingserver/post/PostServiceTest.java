@@ -15,6 +15,8 @@ import com.depromeet.clippingserver.post.domain.PostService;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PostServiceTest {
+	Long postId = 1L;
+	
 	@Autowired
 	private PostService postService;
 
@@ -38,10 +40,13 @@ public class PostServiceTest {
 	
 	@Test
 	public void testModifyPostCategoryId() {
-		Long postId = 1L;
 		Long categoryId = 2L;
 		PostDto postDto = postService.modifyPostCategoryId(postId, categoryId);
 		assertEquals(postId, postDto.getId());
 	}
-
+	
+	@Test
+	public void testdeletePostOne() {
+		postService.deletePostOne(postId);
+	}
 }
