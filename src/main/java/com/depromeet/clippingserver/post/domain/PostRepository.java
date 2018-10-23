@@ -28,5 +28,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	@Modifying
 	@Transactional
 	void updateDeletedTrue(@Param("postId") Long postId);
+	
+	@Query("update Post p set p.isBookmark = true where p.id = :postId")
+	@Modifying
+	@Transactional
+	void updateBookmark(@Param("postId") Long postId);
 
 }

@@ -67,4 +67,10 @@ public class PostService {
 		return re;
 	}
 
+	public PostDto updateBookmark(Long postId) {
+		postRepository.updateBookmark(postId);
+		Optional<Post> post = postRepository.findById(postId);
+		return post.map(PostDto::fromEntity).orElseThrow(PostNotFoundException::new);
+	}
+
 }
