@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
 import com.depromeet.clippingserver.category.domain.CategoryService;
 import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
+import com.depromeet.clippingserver.post.domain.PostService;
 
 @RestController
 public class CategoryController {
@@ -49,6 +50,12 @@ public class CategoryController {
 	public ResponseEntity<List<CategoryDto>> updateCategory(@RequestHeader(value = "UserId") Long userId,@RequestBody List<CategoryDto> category) {
 		category = categoryService.updateOrderNo(userId, category);
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(category);
+	}
+	
+	@PutMapping(path = "/categories/{categoryId}")
+	public ResponseEntity<CategoryDto> updateCategoryName(@RequestBody CategoryDto category, @PathVariable(name="categoryId") Long id){
+		CategoryDto re = categoryService.updateName(category.getName(), id);
+		return ResponseEntity.ok().body(re);
 	}
 
 	@DeleteMapping(path = "/categories/{categoryId}")
