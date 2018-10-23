@@ -21,8 +21,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.depromeet.clippingserver.category.domain.Category;
+import com.depromeet.clippingserver.category.domain.CategoryDto;
 import com.depromeet.clippingserver.category.domain.CategoryRepository;
 import com.depromeet.clippingserver.category.domain.CategoryService;
+import com.depromeet.clippingserver.exception.CategoryNotFoundException;
 import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
 import com.depromeet.clippingserver.post.domain.Post;
 import com.depromeet.clippingserver.post.domain.PostRepository;
@@ -44,7 +46,7 @@ public class CategoryRepositoryTest {
 	private PostRepository postRepository;
 
 	final Long USER_ID = 1L;
-	
+
 	@Test
 	public void a_testfindMaxOrderNoByUserIdReturnZero() {
 		Integer findMaxOrderNo = categoryRepository.findMaxOrderNoByUserId(1L).orElse(0);
@@ -127,18 +129,16 @@ public class CategoryRepositoryTest {
 					.build());
 		}
 		Category category = Category.builder().name("연예기사").orderNo(1).user(User.builder().id(USER_ID).build()).build();
-		posts.forEach( post ->
-				category.addPost(post)
-		);
+		posts.forEach(post -> category.addPost(post));
 		categoryRepository.save(category);
-		
-		
-		List<Post> testPosts = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(USER_ID, PageRequest.of(0, 100)).stream()
-				.filter( post -> {
+
+		List<Post> testPosts = postRepository
+				.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(USER_ID, PageRequest.of(0, 100)).stream()
+				.filter(post -> {
 					Optional<Category> opt = Optional.ofNullable(post.getCategory());
-					if(opt.isPresent()) {
+					if (opt.isPresent()) {
 						return opt.get().getId().equals(1L);
-					}else {
+					} else {
 						return false;
 					}
 				}).sorted(Comparator.comparing(Post::getUpdatedDate).reversed()).collect(Collectors.toList());
@@ -147,8 +147,31 @@ public class CategoryRepositoryTest {
 		GetAllPostsResponse postDtos = categoryService.findParticularPosts(1L, USER_ID, PageRequest.of(0, 100));
 
 		// then
-		for(int i = 0; i < testPosts.size(); i++) {
+		for (int i = 0; i < testPosts.size(); i++) {
 			assertEquals(testPosts.get(i).getId(), postDtos.getPosts().get(i).getId());
 		}
+	}
+
+	@Test
+	public void f_testUpdateTitle() {
+		// given
+		String testname = "연예기사";
+		Category testEntity = Category.builder().name(testname).orderNo(1000).user(User.builder().id(USER_ID).build())
+				.build();
+		categoryRepository.save(testEntity);
+		
+		// when
+		String name = "비리 유치원 명단 공개 ";
+		CategoryDto category = categoryService.updateName(name, 1L);
+		assertEquals(name, category.getName());
+		assertEquals(false, testname.equals(name));
+	}
+	
+	@Test(expected=CategoryNotFoundException.class)
+	public void g_testExpectedUpdateTitle() {
+		// given
+		String name = "비리 유치원 명단 공개 ";
+		// when-then
+		categoryService.updateName(name, 99L);
 	}
 }

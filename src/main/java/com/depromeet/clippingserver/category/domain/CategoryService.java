@@ -1,6 +1,7 @@
 package com.depromeet.clippingserver.category.domain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,11 @@ public class CategoryService {
 		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(posts.getContent());
 		re.addPageInfo(posts);
 		return re;
+	}
+
+	public CategoryDto updateName(String name, Long id) {
+		categoryRepository.updateName(name, id);
+		Optional<Category> category = categoryRepository.findById(id);
+		return category.map(CategoryDto::fromEntity).orElseThrow(CategoryNotFoundException::new);
 	}
 }
