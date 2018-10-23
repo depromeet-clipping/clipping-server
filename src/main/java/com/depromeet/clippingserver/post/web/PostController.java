@@ -47,6 +47,12 @@ public class PostController {
     	return ResponseEntity.ok().body(re);
     }
     
+    @PutMapping("/post/{postId}/bookmark")
+    public ResponseEntity<PostDto> bookmarkPost(@PathVariable(name="postId") Long postId){
+    	PostDto re = postService.updateBookmark(postId);
+    	return ResponseEntity.ok().body(re);
+    }
+    
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable(name="postId") Long postId){
     	postService.deletePostOne(postId);

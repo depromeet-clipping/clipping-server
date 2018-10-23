@@ -61,4 +61,12 @@ public class PostServiceTest {
 	public void testdeletePostOne() {
 		postService.deletePostOne(postId);
 	}
+	
+	@Test
+	public void testUpdateIsBookmark() {
+		Long postId = 1L;
+		PostDto postDto = postService.updateBookmark(postId);
+		
+		assertEquals(true, postDto.isBookmark());
+	}
 }
