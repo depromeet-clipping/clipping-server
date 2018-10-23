@@ -58,7 +58,7 @@ public class PostService {
 			post = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId, pageable);
 		}else {
 			post = postRepository.findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(userId, keyword, keyword, pageable);
-			if(post.getSize() == 0) {
+			if(post.getTotalElements() == 0) {
 				post = postRepository.findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(userId, keyword, keyword, pageable);	
 			}
 		}
