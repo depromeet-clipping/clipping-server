@@ -10,22 +10,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.depromeet.clippingserver.category.domain.CategoryDto;
 import com.depromeet.clippingserver.post.domain.PostDto;
-import com.depromeet.clippingserver.post.domain.PostRepository;
 import com.depromeet.clippingserver.post.domain.PostService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PostServiceTest {
 	@Autowired
-	private PostRepository postRepository;
-
-	@Autowired
 	private PostService postService;
 
 	@Test
-	public void testsavePostService() {
+	public void testSavePostService() {
 		//given
-		
 		String url = "http://www.hani.co.kr/arti/society/society_general/866836.html?_fr=mt1";
 		CategoryDto category = CategoryDto.builder().id(1L).build();
 		String comment = "좀 있다 화장실에서 볼 것";
@@ -39,6 +34,14 @@ public class PostServiceTest {
 		assertEquals("운영비로 술·골프…사립유치원 뺨친 ‘민간 요양원 비리’ : 사회일반 : 사회 : 뉴스 : 한겨레", title);
 		assertEquals("www.hani.co.kr", sourceOf);
 		assertEquals("http://img.hani.co.kr/imgdb/resize/2018/1022/00502597_20181022.JPG", thumbnailImgLink);
+	}
+	
+	@Test
+	public void testModifyPostCategoryId() {
+		Long postId = 1L;
+		Long categoryId = 2L;
+		PostDto postDto = postService.modifyPostCategoryId(postId, categoryId);
+		assertEquals(postId, postDto.getId());
 	}
 
 }
