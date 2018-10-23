@@ -36,5 +36,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	@Transactional
 	@Query("update Category c set c.deleted = true where c.id = :id")
 	public void updateDeletedTrue(@Param("id") Long id);
+	
+	@Modifying
+	@Transactional
+	@Query("update Category c set c.name = :name where c.id = :id")
+	public void updateName(@Param("name") String name, @Param("id") Long id);
 
 }
