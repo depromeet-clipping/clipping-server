@@ -1,5 +1,6 @@
 package com.depromeet.clippingserver.post.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jsoup.Connection;
@@ -45,6 +46,19 @@ public class PostService {
 	public void deletePostOne(Long postId) {
 		postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
 		postRepository.updateDeletedTrue(postId);
+	}
+
+	public GetAllPostsResponse searchPost(Long userId, String keyword) {
+		List<Post> re;
+		if(keyword == null || keyword.equals("")) {
+			re = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId);
+		}else {
+			re = postRepository.findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(userId, keyword, keyword);
+			if(re.size() == 0) {
+				re = postRepository.findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(userId, keyword, keyword);	
+			}
+		}
+		return GetAllPostsResponse.fromEntity(re);
 	}
 
 }

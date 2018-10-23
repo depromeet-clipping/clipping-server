@@ -20,4 +20,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	@Modifying
 	@Transactional
 	void updateDeletedTrue(@Param("postId") Long postId);
+
+	List<Post> findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(Long userId, String title, String comment);
+
+	List<Post> findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(Long userId, String title, String comment);
+	
+	List<Post> findByUserIdAndCommentContainingAndDeletedFalse(Long userId, String comment);
 }

@@ -6,14 +6,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.depromeet.clippingserver.category.domain.CategoryDto;
+import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
 import com.depromeet.clippingserver.post.domain.PostDto;
 import com.depromeet.clippingserver.post.domain.PostService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest @ActiveProfiles("test")
 public class PostServiceTest {
 	Long postId = 1L;
 	
@@ -43,6 +45,14 @@ public class PostServiceTest {
 		Long categoryId = 2L;
 		PostDto postDto = postService.modifyPostCategoryId(postId, categoryId);
 		assertEquals(postId, postDto.getId());
+	}
+	
+	@Test
+	public void testSearchPost() {
+		Long userId = 1L;
+		String keyword = "한국인";
+		GetAllPostsResponse posts = postService.searchPost(userId, keyword);
+		assertEquals(2, posts.getPosts().size());
 	}
 	
 	@Test

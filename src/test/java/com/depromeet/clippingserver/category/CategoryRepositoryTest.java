@@ -43,7 +43,7 @@ public class CategoryRepositoryTest {
 	private PostRepository postRepository;
 
 	final Long USER_ID = 1L;
-
+	
 	@Test
 	public void a_testfindMaxOrderNoByUserIdReturnZero() {
 		Integer findMaxOrderNo = categoryRepository.findMaxOrderNoByUserId(1L).orElse(0);
