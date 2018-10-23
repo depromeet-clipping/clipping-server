@@ -20,4 +20,10 @@ public class ExceptionController {
 	public String handleCategoryNotFound(CategoryNotFoundException e) {
 		return e.getMessage();
 	}
+	
+	@ResponseStatus(code=HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value=PostNotFoundException.class)
+	public String handleConstraintViolationException(PostNotFoundException e) {
+		return e.getMessage();
+	}
 }
