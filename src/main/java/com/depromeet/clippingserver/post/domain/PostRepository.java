@@ -29,7 +29,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	@Transactional
 	void updateDeletedTrue(@Param("postId") Long postId);
 	
-	@Query("update Post p set p.isBookmark = true where p.id = :postId")
+	@Query("update Post p set p.isBookmark = case p.isBookmark when true then false else true end where p.id = :postId")
 	@Modifying
 	@Transactional
 	void updateBookmark(@Param("postId") Long postId);
