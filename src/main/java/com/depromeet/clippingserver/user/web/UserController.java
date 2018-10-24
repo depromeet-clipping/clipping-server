@@ -16,7 +16,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping(value="/join")
+	@PostMapping(value="/user")
 	public ResponseEntity<Map<String, Long>> joinUser(@RequestHeader(value="DeviceKey") String deviceKey, HashMap<String, Long> re) {
 		re.put("userId", userService.join(deviceKey));
 		return ResponseEntity.ok().body(re);
