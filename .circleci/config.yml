@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
 
-    working_directory: ~/repo
+    working_directory: ~/clipping-server
 
     environment:
       JVM_OPTS: -Xmx3200m
@@ -23,14 +23,14 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: gradlew dependencies
+      - run: ./gradlew dependencies
 
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: gradlew test
+      - run: ~/.gradlew test
 
 
 
