@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
 import com.depromeet.clippingserver.category.domain.CategoryService;
 import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
-import com.depromeet.clippingserver.post.domain.PostService;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 public class CategoryController {
@@ -32,10 +35,16 @@ public class CategoryController {
 		return ResponseEntity.ok().body(re);
 	}
 	
+	@ApiImplicitParams({
+    	@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+    			value = "Results page you want to retrieve (0..N)"),
+    	@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+    	value = "Number of records per page.")
+    })
 	@GetMapping(path ="/categories/{categoryId}/posts")
 	public ResponseEntity<GetAllPostsResponse> getPostsUsingCategoryId(@RequestHeader(value = "UserId") Long userId, 
 																	    @PathVariable(name="categoryId") Long categoryId,
-																	    Pageable pageable){
+																	    @ApiIgnore Pageable pageable){
 		GetAllPostsResponse re = categoryService.findParticularPosts(categoryId, userId, pageable);
 		return ResponseEntity.ok().body(re);
 	}
