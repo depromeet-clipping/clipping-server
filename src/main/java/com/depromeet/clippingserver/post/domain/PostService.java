@@ -1,7 +1,9 @@
 package com.depromeet.clippingserver.post.domain;
 
+import java.net.MalformedURLException;
 import java.util.Optional;
 
+import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,12 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 
-	public PostDto saveNewPost(PostDto postDto, Long userId) {
+	public PostDto saveNewPost(PostDto postDto, Long userId) throws MalformedURLException {
 		String url = postDto.getUrl();
+		URLValidator urlValidator = new URLValidator();
+		if(!urlValidator.isValid(url, null)) {
+			throw new MalformedURLException("입력한 URL이 무효합니다.");
+		}
 		Connection conn = Jsoup.connect(url);
 		postDto.addThumnailAndTitleAndSourceOf(url, conn);
 		Post post = Post.builder().comment(postDto.getComment()).url(url).sourceOf(postDto.getSourceOf())

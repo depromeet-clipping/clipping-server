@@ -1,5 +1,7 @@
 package com.depromeet.clippingserver.post.web;
 
+import java.net.MalformedURLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +59,7 @@ public class PostController {
     }
     
     @PostMapping("/posts")
-    public ResponseEntity<PostDto> saveNewPost(@RequestHeader(value="UserID") Long userId, @RequestBody PostDto postDto){
+    public ResponseEntity<PostDto> saveNewPost(@RequestHeader(value="UserID") Long userId, @RequestBody PostDto postDto) throws MalformedURLException{
     	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     	postDto = postService.saveNewPost(postDto, userId);
     	return ResponseEntity.ok().body(postDto);
