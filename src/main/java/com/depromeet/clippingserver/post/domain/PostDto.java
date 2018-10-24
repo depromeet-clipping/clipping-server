@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.jsoup.Connection;
-import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
@@ -44,7 +44,7 @@ public class PostDto {
 
 	private String getThumnailLink(Connection conn) {
 		try {
-			Element el = conn.get().head().tagName("meta").getElementsByAttributeValue("property", "og:image").get(0);
+			Elements el = conn.get().head().tagName("meta").getElementsByAttributeValue("property", "og:image");
 			String ThumnailLink = el.attr("content");
 			return ThumnailLink;
 		} catch (IOException e) {

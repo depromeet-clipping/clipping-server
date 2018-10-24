@@ -4,10 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @SuppressWarnings("serial")
-@ResponseStatus(code = HttpStatus.FORBIDDEN)
-public class UserNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class WrongURLException extends RuntimeException {
 
-	public UserNotFoundException() {
-		super("UserNotFoundException");
+	public WrongURLException() {
+		super("입력한 URL이 무효합니다.");
 	}
+
 }
