@@ -1,37 +1,48 @@
 package com.depromeet.clippingserver.exception;
 
-import java.net.MalformedURLException;
+import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 @RestController
 public class ExceptionController {
-	
-	@ResponseStatus(code=HttpStatus.FORBIDDEN)
-	@ExceptionHandler(value=UserNotFoundException.class)
-	public String handleUserNotFound(UserNotFoundException e) {
-		return e.getMessage();
+
+	@ExceptionHandler(value = UserNotFoundException.class)
+	public ResponseEntity<ErrorDetail> handleUserNotFound(UserNotFoundException e, WebRequest request) {
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		ErrorDetail body = new ErrorDetail(LocalDateTime.now(), status.value(), e.getMessage(),
+				request.getDescription(false));
+		return ResponseEntity.status(status).body(body);
 	}
-	@ResponseStatus(code=HttpStatus.NOT_FOUND)
-	@ExceptionHandler(value=CategoryNotFoundException.class)
-	public String handleCategoryNotFound(CategoryNotFoundException e) {
-		return e.getMessage();
+
+	@ExceptionHandler(value = CategoryNotFoundException.class)
+	public ResponseEntity<ErrorDetail> handleCategoryNotFound(CategoryNotFoundException e, WebRequest request) {
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ErrorDetail body = new ErrorDetail(LocalDateTime.now(), status.value(), e.getMessage(),
+				request.getDescription(false));
+		return ResponseEntity.status(status).body(body);
+	}
+
+	@ExceptionHandler(value = PostNotFoundException.class)
+	public ResponseEntity<ErrorDetail> handleConstraintViolationException(PostNotFoundException e, WebRequest request) {
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ErrorDetail body = new ErrorDetail(LocalDateTime.now(), status.value(), e.getMessage(),
+				request.getDescription(false));
+		return ResponseEntity.status(status).body(body);
 	}
 	
-	@ResponseStatus(code=HttpStatus.NOT_FOUND)
-	@ExceptionHandler(value=PostNotFoundException.class)
-	public String handleConstraintViolationException(PostNotFoundException e) {
-		return e.getMessage();
-	}
-	
-	@ExceptionHandler(value=MalformedURLException.class)
-	@ResponseStatus(code=HttpStatus.BAD_REQUEST)
-	public String handleMalformedURLException(MalformedURLException e) {
-		return e.getMessage();
+
+	@ExceptionHandler(value = WrongURLException.class)
+	public ResponseEntity<ErrorDetail> handleMalformedURLException(WrongURLException e, WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ErrorDetail body = new ErrorDetail(LocalDateTime.now(), status.value(), e.getMessage(),
+				request.getDescription(false));
+		return ResponseEntity.status(status).body(body);
 	}
 }

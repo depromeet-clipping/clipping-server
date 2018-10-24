@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.exception.CategoryNotFoundException;
 import com.depromeet.clippingserver.exception.PostNotFoundException;
+import com.depromeet.clippingserver.exception.WrongURLException;
 
 @Service
 @Transactional
@@ -26,7 +27,7 @@ public class PostService {
 		String url = postDto.getUrl();
 		URLValidator urlValidator = new URLValidator();
 		if(!urlValidator.isValid(url, null)) {
-			throw new MalformedURLException("입력한 URL이 무효합니다.");
+			throw new WrongURLException();
 		}
 		Connection conn = Jsoup.connect(url);
 		postDto.addThumnailAndTitleAndSourceOf(url, conn);
