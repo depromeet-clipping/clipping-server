@@ -33,7 +33,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - store_test_results:
-          path: test-results
+          path: build/reports/tests/test
 
       - run: ./gradlew test
 
