@@ -52,6 +52,10 @@ public class PostService {
 		postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
 		postRepository.updateDeletedTrue(postId);
 	}
+	
+	public Post findOne(Long postId) {
+		return postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+	}
 
 	public GetAllPostsResponse searchPost(Long userId, String keyword, Pageable pageable) {
 		Page<Post> post;

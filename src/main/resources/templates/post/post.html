@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Document</title>
-<script src="js/Readability.js"></script>
-<script src="js/vue.min.js"></script>
-<script src="js/axios.min.js"></script>
+<script src="/js/Readability.js"></script>
+<script src="/js/vue.min.js"></script>
+<script src="/js/axios.min.js"></script>
 <style type="text/css">
 #app {
 	padding: 1.1em;
@@ -38,7 +38,7 @@ img {
 	<div id="app">
 		<div>
 			<div id="header">
-				<a :href="url">원 출처</a>
+				<a :href="url">{{sourceOf}}</a>
 				<h1 v-text="title"></h1>
 			</div>
 			<div class="container" v-html="content"></div>
