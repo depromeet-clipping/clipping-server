@@ -1,43 +1,68 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
+settings: &settings
+  docker:
+    - image: circleci/openjdk:8-jdk
+  working_directory: ~/clipping-server
+  environment:
+    JVM_OPTS: -Xmx3200m
+    TERM: dumb
+
+prepare-steps: &prepare-steps
+  - checkout
+  - run:
+      name: Add Permission
+      command: chmod +x ./gradlew
+  - restore_cache:
+      keys:
+        - v1-dependencies-{{ checksum "build.gradle" }}
+        # fallback to using the latest cache if no exact match is found
+        - v1-dependencies-
+  - run:
+      name: Download Dependencies
+      command: ./gradlew dependencies
+  - save_cache:
+      paths:
+        - ~/.gradle
+      key: v1-dependencies-{{ checksum "build.gradle" }}
+
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/openjdk:8-jdk
-
-    working_directory: ~/clipping-server
-
-    environment:
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-
+  test:
+    <<: *settings
     steps:
-      - checkout
-
-      - run: chmod +x ./gradlew
-
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run: ./gradlew dependencies
-
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      - run: ./gradlew test
-
+      <<: *prepare_steps
+      - run:
+          name: Run Tests
+          command: ./gradlew test
       - store_artifacts:
           path: build/reports/tests/test
       - store_test_results:
           path: build/test-results/test
+  build:
+    <<: *settings
 
+    steps:
+      <<: *prepare_steps
 
+      - run:
+          name: Build
+          command: ./gradlew build -x test
 
+      - store_artifacts:
+          path: build/libs/clipping-server-*.jar
+
+      - persist_to_workspace:
+          root: build/libs
+          paths:
+            - clipping-server-*.jar
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
