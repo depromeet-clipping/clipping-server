@@ -17,6 +17,8 @@ jobs:
     steps:
       - checkout
 
+      - run: chmod +x ./gradlew
+
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "build.gradle" }}
