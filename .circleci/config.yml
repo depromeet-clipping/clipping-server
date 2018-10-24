@@ -7,29 +7,35 @@ settings: &settings
     TERM: dumb
 
 prepare-steps: &prepare-steps
-  - checkout
   - run:
       name: Add Permission
       command: chmod +x ./gradlew
-  - restore_cache:
-      keys:
-        - v1-dependencies-{{ checksum "build.gradle" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-dependencies-
-  - run:
-      name: Download Dependencies
-      command: ./gradlew dependencies
-  - save_cache:
-      paths:
-        - ~/.gradle
-      key: v1-dependencies-{{ checksum "build.gradle" }}
 
-version: 2
+version: 2.1
+commands:
+  prepare-steps:
+    steps:
+      - run:
+          name: Add Permission
+          command: chmod +x ./gradlew
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 jobs:
   test:
     <<: *settings
     steps:
-      <<: *prepare-steps
+      - checkout
+      - prepare-steps
       - run:
           name: Run Tests
           command: ./gradlew test
@@ -39,17 +45,14 @@ jobs:
           path: build/test-results/test
   build:
     <<: *settings
-
     steps:
-      <<: *prepare_steps
-
+      - checkout
+      - prepare-steps
       - run:
           name: Build
           command: ./gradlew build -x test
-
       - store_artifacts:
           path: build/libs/clipping-server-*.jar
-
       - persist_to_workspace:
           root: build/libs
           paths:
