@@ -1,9 +1,9 @@
 package com.depromeet.clippingserver.post.domain;
 
-import java.net.MalformedURLException;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +23,32 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 
-	public PostDto saveNewPost(PostDto postDto, Long userId) throws MalformedURLException {
-		String url = postDto.getUrl();
-		URLValidator urlValidator = new URLValidator();
-		if(!urlValidator.isValid(url, null)) {
+	public PostDto saveNewPost(PostDto postDto, Long userId) {
+		String url = getValidUrl(postDto.getUrl());
+		Connection conn = null;
+		try {
+			conn = Jsoup.connect(url);
+			postDto.addThumnailAndTitleAndSourceOf(url, conn);
+		} catch (Exception e) {
 			throw new WrongURLException();
 		}
-		Connection conn = Jsoup.connect(url);
-		postDto.addThumnailAndTitleAndSourceOf(url, conn);
 		Post post = Post.builder().comment(postDto.getComment()).url(url).sourceOf(postDto.getSourceOf())
 				.category(Category.builder().id(postDto.getCategory().getId()).build())
 				.thumbnailImgLink(postDto.getThumnailLink()).title(postDto.getTitle()).userId(userId).build();
 		Post re = postRepository.save(post);
 		return PostDto.fromEntity(re);
+	}
+
+	private String getValidUrl(String url) {
+		if(url == null) {throw new WrongURLException();}
+		Pattern r = Pattern.compile("^((http)|(https)):[\\/]{2}");
+		Matcher m = r.matcher(url);
+		if (!m.find()) {
+			if (url.contains(".")) {
+				url = "http://" + url;
+			}
+		}
+		return url;
 	}
 
 	public GetAllPostsResponse findAllPostsOrdered(Long userId, Pageable pageable) {
@@ -59,7 +72,7 @@ public class PostService {
 		postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
 		postRepository.updateDeletedTrue(postId);
 	}
-	
+
 	public Post findOne(Long postId) {
 		return postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
 	}
@@ -82,7 +95,8 @@ public class PostService {
 	}
 
 	public GetAllPostsResponse findAllBookmarkPost(Long userId, Pageable pageable) {
-		Page<Post> post = postRepository.findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(userId, pageable);
+		Page<Post> post = postRepository.findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(userId,
+				pageable);
 		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(post.getContent());
 		re.addPageInfo(post);
 		return re;

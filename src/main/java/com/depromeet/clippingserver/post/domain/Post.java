@@ -35,7 +35,7 @@ public class Post {
 	@Column(name = "post_id")
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String title;
 
 	@Column(nullable = false)
