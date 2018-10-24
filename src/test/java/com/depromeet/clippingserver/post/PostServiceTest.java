@@ -9,23 +9,31 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
+import com.depromeet.clippingserver.category.domain.CategoryRepository;
 import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
 import com.depromeet.clippingserver.post.domain.PostDto;
 import com.depromeet.clippingserver.post.domain.PostService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest @ActiveProfiles("test")
+@Transactional
 public class PostServiceTest {
 	Long postId = 1L;
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Test
 	public void testSavePostService() {
 		//given
+		categoryRepository.save(Category.builder().name("한국").build());
 		String url = "http://www.hani.co.kr/arti/society/society_general/866836.html?_fr=mt1";
 		CategoryDto category = CategoryDto.builder().id(1L).build();
 		String comment = "좀 있다 화장실에서 볼 것";
@@ -43,7 +51,8 @@ public class PostServiceTest {
 	
 	@Test
 	public void testModifyPostCategoryId() {
-		Long categoryId = 2L;
+		categoryRepository.save(Category.builder().name("한국").build());
+		Long categoryId = 1L;
 		PostDto postDto = postService.modifyPostCategoryId(postId, categoryId);
 		assertEquals(postId, postDto.getId());
 	}
