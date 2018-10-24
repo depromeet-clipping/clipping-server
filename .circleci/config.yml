@@ -29,7 +29,7 @@ jobs:
   test:
     <<: *settings
     steps:
-      <<: *prepare_steps
+      <<: *prepare-steps
       - run:
           name: Run Tests
           command: ./gradlew test
