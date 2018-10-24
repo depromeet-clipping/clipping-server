@@ -19,6 +19,10 @@ import com.depromeet.clippingserver.post.domain.PostDto;
 import com.depromeet.clippingserver.post.domain.PostService;
 import com.depromeet.clippingserver.user.domain.UserRepository;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import springfox.documentation.annotations.ApiIgnore;
+
 @RestController
 public class PostController {
 
@@ -27,11 +31,29 @@ public class PostController {
     
     @Autowired
     private UserRepository userRepository;
-
+    
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+    			value = "Results page you want to retrieve (0..N)"),
+    	@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+    	value = "Number of records per page.")
+    })
     @GetMapping("/posts")
-    public GetAllPostsResponse getAllPosts(@RequestHeader(value="UserID") Long userId,String keyword, Pageable pageable) throws Exception{
+    public GetAllPostsResponse getAllPosts(@RequestHeader(value="UserID") Long userId,String keyword,@ApiIgnore Pageable pageable) throws Exception{
     	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return postService.searchPost(userId, keyword, pageable);
+    }
+    
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+    			value = "Results page you want to retrieve (0..N)"),
+    	@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+    	value = "Number of records per page.")
+    })
+    @GetMapping("/bookmark")
+    public GetAllPostsResponse getBookmarkPost(@RequestHeader(value="UserID") Long userId,@ApiIgnore Pageable pageable) {
+    	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    	return postService.findAllBookmarkPost(userId, pageable);
     }
     
     @PostMapping("/posts")
