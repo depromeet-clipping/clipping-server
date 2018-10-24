@@ -19,7 +19,7 @@ import com.depromeet.clippingserver.post.domain.PostDto;
 import com.depromeet.clippingserver.post.domain.PostService;
 import com.depromeet.clippingserver.user.domain.UserRepository;
 
-@RestController("/posts")
+@RestController
 public class PostController {
 
     @Autowired
@@ -28,13 +28,13 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping("/posts")
     public GetAllPostsResponse getAllPosts(@RequestHeader(value="UserID") Long userId,String keyword, Pageable pageable) throws Exception{
     	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return postService.searchPost(userId, keyword, pageable);
     }
     
-    @PostMapping
+    @PostMapping("/posts")
     public ResponseEntity<PostDto> saveNewPost(@RequestHeader(value="UserID") Long userId, @RequestBody PostDto postDto){
     	userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     	postDto = postService.saveNewPost(postDto, userId);
