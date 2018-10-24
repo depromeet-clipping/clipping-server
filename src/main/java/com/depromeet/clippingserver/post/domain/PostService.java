@@ -14,7 +14,8 @@ import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.exception.CategoryNotFoundException;
 import com.depromeet.clippingserver.exception.PostNotFoundException;
 
-@Service @Transactional
+@Service
+@Transactional
 public class PostService {
 	@Autowired
 	private PostRepository postRepository;
@@ -40,7 +41,7 @@ public class PostService {
 	public PostDto modifyPostCategoryId(Long postId, Long categoryId) {
 		try {
 			postRepository.updateCategoryId(postId, categoryId);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new CategoryNotFoundException();
 		}
 		Optional<Post> post = postRepository.findById(postId);
@@ -54,14 +55,23 @@ public class PostService {
 
 	public GetAllPostsResponse searchPost(Long userId, String keyword, Pageable pageable) {
 		Page<Post> post;
-		if(keyword == null || keyword.equals("")) {
+		if (keyword == null || keyword.equals("")) {
 			post = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId, pageable);
-		}else {
-			post = postRepository.findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(userId, keyword, keyword, pageable);
-			if(post.getTotalElements() == 0) {
-				post = postRepository.findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(userId, keyword, keyword, pageable);	
+		} else {
+			post = postRepository.findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(userId, keyword,
+					keyword, pageable);
+			if (post.getTotalElements() == 0) {
+				post = postRepository.findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(userId, keyword,
+						keyword, pageable);
 			}
 		}
+		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(post.getContent());
+		re.addPageInfo(post);
+		return re;
+	}
+
+	public GetAllPostsResponse findAllBookmarkPost(Long userId, Pageable pageable) {
+		Page<Post> post = postRepository.findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(userId, pageable);
 		GetAllPostsResponse re = GetAllPostsResponse.fromEntity(post.getContent());
 		re.addPageInfo(post);
 		return re;

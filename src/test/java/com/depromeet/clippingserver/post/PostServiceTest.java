@@ -69,4 +69,14 @@ public class PostServiceTest {
 		
 		assertEquals(true, postDto.isBookmark());
 	}
+	
+	@Test
+	public void testGetAllBookmarkPost() {
+		Long userId = 1L;
+		GetAllPostsResponse re = postService.findAllBookmarkPost(userId, PageRequest.of(0, 20));
+		
+		re.getPosts().forEach(post -> {
+			assertEquals(post.isBookmark(), true);
+		});
+	}
 }

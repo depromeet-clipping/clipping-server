@@ -16,6 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<Post> findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
 
 	Page<Post> findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
+	
+	Page<Post> findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 
 	List<Post> findByUserIdAndCommentContainingAndDeletedFalse(Long userId, String comment);
 
