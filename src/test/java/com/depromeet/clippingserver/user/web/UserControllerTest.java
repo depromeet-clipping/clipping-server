@@ -36,7 +36,7 @@ public class UserControllerTest {
 
 		given(userService.join(DEVICE_KEY)).willReturn(1L);
 
-		mvc.perform(post("/join").header("DeviceKey", DEVICE_KEY)).andExpect(status().isOk())
+		mvc.perform(post("/user").header("DeviceKey", DEVICE_KEY)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.userId").value(1)).andDo(print());
 	}
 
