@@ -6,11 +6,6 @@ settings: &settings
     JVM_OPTS: -Xmx3200m
     TERM: dumb
 
-prepare-steps: &prepare-steps
-  - run:
-      name: Add Permission
-      command: chmod +x ./gradlew
-
 version: 2.1
 commands:
   prepare-steps:
@@ -54,10 +49,17 @@ jobs:
       - store_artifacts:
           path: build/libs/clipping-server-*.jar
       - persist_to_workspace:
-          root: build/libs
+          root: .
           paths:
-            - clipping-server-*.jar
-
+            - *
+    deploy:
+      <<: *settings
+      steps:
+        - attach_workspace:
+            at: .
+        - run:
+            name: Deploy To Heroku
+            command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 workflows:
   version: 2
   build-deploy:
@@ -69,3 +71,6 @@ workflows:
           filters:
             branches:
               only: develop
+      - deploy:
+          requires:
+            - build
