@@ -67,9 +67,9 @@ public class CategoryController {
 		return ResponseEntity.ok().body(re);
 	}
 
-	@DeleteMapping(path = "/categories/{categoryId}")
-	public ResponseEntity<String> deleteCategory(@RequestHeader(value = "UserId") Long userId,@PathVariable(name="categoryId") Long categoryId) {
-		categoryService.updateDeletedTrue(categoryId);
+	@DeleteMapping(path = "/categories")
+	public ResponseEntity<String> deleteCategory(@RequestHeader(value = "UserId") Long userId,@RequestBody CategoryIdList categoryId) {
+		categoryService.updateDeletedTrue(categoryId.getCategoryId());
 		return ResponseEntity.status(HttpStatus.OK).body("delete success!");
 	}
 }

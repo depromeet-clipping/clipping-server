@@ -44,9 +44,14 @@ public class CategoryService {
 		return this.findValidAndOrderedCategory(userId);
 	}
 
-	public void updateDeletedTrue(Long categoryId) {
-		categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
-		categoryRepository.updateDeletedTrue(categoryId);
+	public void updateDeletedTrue(ArrayList<Long> categoryIds) {
+		if(categoryIds.isEmpty()) {
+			throw new CategoryNotFoundException();
+		}
+		categoryIds.forEach(id -> {
+			categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+			categoryRepository.updateDeletedTrue(id);
+		});
 	}
 
 	public GetAllPostsResponse findParticularPosts(long categoryId, Long userId, Pageable pageable) {
