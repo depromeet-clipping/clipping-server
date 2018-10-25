@@ -47,16 +47,11 @@ jobs:
           name: Build
           command: ./gradlew build -x test
       - store_artifacts:
-          path: build/libs/clipping-server-*.jar
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./*
+          path: build/libs
   deploy:
     <<: *settings
     steps:
-      - attach_workspace:
-          at: .
+      - checkout
       - run:
           name: Deploy To Heroku
           command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
