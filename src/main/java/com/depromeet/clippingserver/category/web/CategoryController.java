@@ -56,8 +56,8 @@ public class CategoryController {
 	}
 
 	@PutMapping(path = "/categories")
-	public ResponseEntity<List<CategoryDto>> updateCategory(@RequestHeader(value = "UserId") Long userId,@RequestBody List<CategoryDto> category) {
-		category = categoryService.updateOrderNo(userId, category);
+	public ResponseEntity<List<CategoryDto>> updateCategoryOrderNo(@RequestHeader(value = "UserId") Long userId,@RequestBody CategoryIdList categoryId) {
+		List<CategoryDto> category = categoryService.updateOrderNo(userId, categoryId.getCategoryId());
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(category);
 	}
 	

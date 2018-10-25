@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -65,21 +64,20 @@ public class CategoryRepositoryTest {
 		categoryRepository.saveAll(categories);
 
 		// when
-		Category[] categoryArr = { Category.builder().id(2L).orderNo(1).build(),
-				Category.builder().id(3L).orderNo(2).build(), Category.builder().id(5L).orderNo(5).build(),
-				Category.builder().id(1L).orderNo(8).build(), Category.builder().id(7L).orderNo(3).build(),
-				Category.builder().id(4L).orderNo(4).build(), Category.builder().id(8L).orderNo(2).build(),
-				Category.builder().id(6L).orderNo(6).build(), Category.builder().id(9L).orderNo(7).build(),
-				Category.builder().id(10L).orderNo(10).build() };
-
-		Arrays.stream(categoryArr).forEach(category -> {
+		Long[] categoryId = { 9L, 8L, 7L, 6L, 5L, 1L, 2L, 3L, 4L, 10L };
+		
+		List<Category> categoryLs = new ArrayList<>();
+		for(int i = 0; i < categoryId.length; i++) {
+			categoryLs.add(Category.builder().id(categoryId[i]).orderNo(i).build() );
+		}
+		categoryLs.forEach(category -> {
 			categoryRepository.updateOrderNoById(category.getOrderNo(), category.getId());
 		});
 
 		Integer findMaxOrderNo = categoryRepository.findMaxOrderNoByUserId(USER_ID).orElse(0);
 
 		categories = categoryRepository.findByUserIdAndDeletedFalseOrderByOrderNoAsc(USER_ID);
-		List<Category> tmp = Arrays.stream(categoryArr).sorted(Comparator.comparing(Category::getOrderNo))
+		List<Category> tmp = categoryLs.stream().sorted(Comparator.comparing(Category::getOrderNo))
 				.collect(Collectors.toList());
 
 		// then
@@ -88,8 +86,8 @@ public class CategoryRepositoryTest {
 			assertThat(categories.get(i).getOrderNo()).isEqualTo(tmp.get(i).getOrderNo());
 		}
 
-		assertEquals("orderNo의 최대값이 일치하지 않습니다", true, findMaxOrderNo.equals(10));
-		assertEquals("2번째 정렬된 카테고리가 제대로 정렬되지 않았습니다.", true, categories.get(1).getId().equals(3L));
+		assertEquals("orderNo의 최대값이 일치하지 않습니다", true, findMaxOrderNo.equals(9));
+		assertEquals("2번째 정렬된 카테고리가 제대로 정렬되지 않았습니다.", true, categories.get(1).getId().equals(8L));
 	}
 
 	@Test

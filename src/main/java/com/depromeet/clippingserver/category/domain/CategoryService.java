@@ -1,5 +1,6 @@
 package com.depromeet.clippingserver.category.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +35,11 @@ public class CategoryService {
 		return CategoryDto.fromEntity(category);
 	}
 
-	public List<CategoryDto> updateOrderNo(Long userId, List<CategoryDto> category) {
+	public List<CategoryDto> updateOrderNo(Long userId, ArrayList<Long> categoryId) {
+		List<Category> category = new ArrayList<>();
+		for(int i = 0; i < categoryId.size(); i++) {
+			category.add(Category.builder().id(categoryId.get(i)).orderNo(i).build() );
+		}
 		category.forEach(dto -> categoryRepository.updateOrderNoById(dto.getOrderNo(), dto.getId()));
 		return this.findValidAndOrderedCategory(userId);
 	}
