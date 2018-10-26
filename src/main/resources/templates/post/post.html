@@ -6,6 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Document</title>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css">
+<link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
+<script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 <script src="/js/Readability.js"></script>
 <script src="/js/vue.min.js"></script>
 <script src="/js/axios.min.js"></script>
@@ -57,6 +59,7 @@ img {
             },
             methods: {
                 parsing() {
+                	 NProgress.start();
                 	 let $this = this;
                 	 axios.post('/post', {
                 		 url: this.url
@@ -68,6 +71,7 @@ img {
                          let doc = new Readability(article).parse();
                          $this.title = doc.title;
    	                     $this.content = doc.content;
+   	                  NProgress.done();
                      })
                      .catch(function (error) {
     					console.log(error);
