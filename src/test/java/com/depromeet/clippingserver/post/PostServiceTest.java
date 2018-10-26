@@ -51,9 +51,8 @@ public class PostServiceTest {
 	
 	@Test
 	public void testModifyPostCategoryId() {
-		categoryRepository.save(Category.builder().name("한국").build());
-		Long categoryId = 1L;
-		PostDto postDto = postService.modifyPostCategoryId(postId, categoryId);
+		Category cateogry = categoryRepository.save(Category.builder().name("한국").build());
+		PostDto postDto = postService.modifyPostCategoryId(postId, cateogry.getId());
 		assertEquals(postId, postDto.getId());
 	}
 	
