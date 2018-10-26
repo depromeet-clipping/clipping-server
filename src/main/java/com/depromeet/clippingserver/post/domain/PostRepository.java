@@ -13,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<Post> findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 	
-	Page<Post> findByUserIdAndTitleContainingAndCommentContainingAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
+	Page<Post> findByUserIdAndTitleContainingIgnoreCaseAndCommentContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
 
-	Page<Post> findByUserIdAndTitleContainingOrCommentContainingAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
+	Page<Post> findByUserIdAndTitleContainingIgnoreCaseOrCommentContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
 	
 	Page<Post> findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 

@@ -1,33 +1,18 @@
 package com.depromeet.clippingserver.post;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.depromeet.clippingserver.exception.UserNotFoundException;
-import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
-import com.depromeet.clippingserver.post.domain.Post;
 import com.depromeet.clippingserver.post.domain.PostService;
 import com.depromeet.clippingserver.post.web.PostController;
-import com.depromeet.clippingserver.user.domain.User;
 import com.depromeet.clippingserver.user.domain.UserRepository;
 
 @RunWith(SpringRunner.class)
