@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.depromeet.clippingserver.category.domain.Category;
+import com.depromeet.clippingserver.category.domain.CategoryRepository;
 import com.depromeet.clippingserver.exception.CategoryNotFoundException;
 import com.depromeet.clippingserver.exception.PostNotFoundException;
 import com.depromeet.clippingserver.exception.WrongURLException;
@@ -22,6 +23,9 @@ import com.depromeet.clippingserver.exception.WrongURLException;
 public class PostService {
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	public PostDto saveNewPost(PostDto postDto, Long userId) {
 		String url = getValidUrl(postDto.getUrl());
@@ -36,6 +40,7 @@ public class PostService {
 				.category(Category.builder().id(postDto.getCategory().getId()).build())
 				.thumbnailImgLink(postDto.getThumnailLink()).title(postDto.getTitle()).userId(userId).build();
 		Post re = postRepository.save(post);
+		re.addCategory(categoryRepository.findById(re.getCategory().getId()).get());
 		return PostDto.fromEntity(re);
 	}
 
