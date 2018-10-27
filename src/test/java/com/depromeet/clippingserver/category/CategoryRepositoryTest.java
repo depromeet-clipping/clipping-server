@@ -4,6 +4,7 @@
 //import static org.junit.Assert.assertEquals;
 //
 //import java.util.ArrayList;
+//import java.util.Arrays;
 //import java.util.Comparator;
 //import java.util.List;
 //import java.util.Optional;
@@ -172,4 +173,16 @@
 //		// when-then
 //		categoryService.updateName(name, 99L);
 //	}
-//}
+//	
+//	
+//	@Test
+//	public void h_testCategoryNonmatchFinder() {
+//		Long[] categories = {1L, 2L, 3L, 4L, 5L, 6L, 7L};
+//		Long[] reqCategories = { 3L, 4L, 5L, 7L};
+//		
+//		List<Long> reqList = Arrays.asList(reqCategories);
+//		
+//		List<Long> tmp = Arrays.stream(categories).filter(id -> reqList.stream().noneMatch(java.util.function.Predicate.isEqual(id))).collect(Collectors.toList());
+//		System.out.println(tmp.toString());
+//	}
+//}	

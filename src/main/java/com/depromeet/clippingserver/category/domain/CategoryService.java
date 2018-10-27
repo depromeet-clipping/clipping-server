@@ -3,7 +3,12 @@ package com.depromeet.clippingserver.category.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +26,9 @@ import com.depromeet.clippingserver.user.domain.User;
 public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@PersistenceContext
+	private EntityManager em;
 
 	public List<CategoryDto> findValidAndOrderedCategory(Long userId) {
 		return categoryRepository.findByUserIdAndDeletedFalseOrderByOrderNoAsc(userId).stream()
@@ -36,11 +44,28 @@ public class CategoryService {
 	}
 
 	public List<CategoryDto> updateOrderNo(Long userId, ArrayList<Long> categoryId) {
+		if(categoryId.isEmpty()) {
+			throw new CategoryNotFoundException();
+		}
+		
+		categoryId.forEach(id -> {
+			Optional<Category> obj = categoryRepository.findById(id);
+			if(obj.get().isDeleted() == true) {
+				throw new CategoryNotFoundException();
+			}
+			obj.orElseThrow(CategoryNotFoundException::new);
+		});
+		
+		Stream<Category> allCategories = categoryRepository.findByUserIdAndDeletedFalseOrderByOrderNoAsc(userId).stream();
+		List<Long> willDeleteIds = allCategories.map(obj -> obj.getId()).filter(id -> categoryId.stream().noneMatch(Predicate.isEqual(id))).collect(Collectors.toList());
+		willDeleteIds.forEach(id -> categoryRepository.updateDeletedTrue(id));
+		
 		List<Category> category = new ArrayList<>();
 		for(int i = 0; i < categoryId.size(); i++) {
 			category.add(Category.builder().id(categoryId.get(i)).orderNo(i).build() );
 		}
 		category.forEach(dto -> categoryRepository.updateOrderNoById(dto.getOrderNo(), dto.getId()));
+		em.clear();
 		return this.findValidAndOrderedCategory(userId);
 	}
 
