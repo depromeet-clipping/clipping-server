@@ -34,6 +34,8 @@ public class PostService {
 			conn = Jsoup.connect(url);
 			postDto.addThumnailAndTitleAndSourceOf(url, conn);
 		} catch (Exception e) {
+			System.out.println(url);
+			System.out.println(e.getMessage());
 			throw new WrongURLException();
 		}
 		Post post = Post.builder().comment(postDto.getComment()).url(url).sourceOf(postDto.getSourceOf())
