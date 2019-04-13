@@ -1,0 +1,25 @@
+version: "3"
+services:
+  clipping-server:
+    container_name: "clipping-server"
+    image: "minudev1212/clipping-server"
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - clipping-bridge
+  clipping-rdb:
+    container_name: "clipping-rdb"
+    image: "mariadb"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: clipping
+    ports:
+      - "3306:3306"
+    volumes:
+      - /opt/mysql/data:/var/lib/mysql
+    networks:
+      - clipping-bridge
+networks:
+  clipping-bridge:

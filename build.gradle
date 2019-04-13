@@ -30,6 +30,8 @@ dependencies {
 	compile 'io.springfox:springfox-swagger2:2.6.1'
 	compile 'io.springfox:springfox-swagger-ui:2.6.1'
 	compile('org.jsoup:jsoup:1.11.3')
+	compile('org.hibernate:hibernate-java8')
+	compile('org.mariadb.jdbc:mariadb-java-client')
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	runtimeOnly('com.h2database:h2')
 	compileOnly('org.projectlombok:lombok')

@@ -35,7 +35,7 @@ public class PostControllerTests {
 //        // given
 //    	final Long USER_ID = 1L;
 //        List<Post> posts = new ArrayList<>();
-//        
+//
 //        final String title1 = "Clipping Server Github";
 //        final String url1 = "https://github.com/depromeet-clipping/clipping-server";
 //        posts.add(Post.builder()
@@ -51,11 +51,11 @@ public class PostControllerTests {
 //                .url(url2)
 //                .userId(USER_ID)
 //                .build());
-//        
+//
 //        Pageable page = PageRequest.of(0, 100);
 //        given(postService.findAllPostsOrdered(USER_ID, page)).willReturn(GetAllPostsResponse.fromEntity(posts));
 //        given(userRepository.findById(USER_ID)).willReturn(Optional.ofNullable(User.builder().build()));
-//        
+//
 //        // when-then
 //        mvc.perform(get(GET_POST_ENDPOINT).header("UserId", USER_ID).param("size", "20").param("page", "0") )
 //                .andExpect(status().isOk())
