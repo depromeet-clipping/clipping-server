@@ -1,0 +1,1 @@
+docker-machine create --driver azure --azure-location koreacentral --azure-size Standard_B1s --azure-subscription-id <subs-id> clipping
