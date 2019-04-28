@@ -38,6 +38,9 @@ public class Post {
 	@Column(nullable = true)
 	private String title;
 
+	@Column(nullable = false, name = "personal_title")
+	private String personalTitle;
+
 	@Column(nullable = false)
 	private String url;
 
