@@ -1,5 +1,6 @@
 package com.depromeet.clippingserver.post.web;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ import com.depromeet.clippingserver.user.domain.UserRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.Valid;
 
 @RestController
 public class PostController {
@@ -54,7 +57,7 @@ public class PostController {
 
 	@PostMapping("/posts")
 	public ResponseEntity<PostDto> saveNewPost(@RequestHeader(value = "UserID") Long userId,
-			@RequestBody PostDto postDto) {
+			@RequestBody @Valid PostDto postDto) {
 		userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		postDto = postService.saveNewPost(postDto, userId);
 		return ResponseEntity.ok().body(postDto);
