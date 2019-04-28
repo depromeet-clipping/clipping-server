@@ -37,7 +37,7 @@ public class PostServiceTest {
 		String url = "http://www.hani.co.kr/arti/society/society_general/866836.html?_fr=mt1";
 		CategoryDto category = CategoryDto.builder().id(1L).build();
 		String comment = "좀 있다 화장실에서 볼 것";
-		PostDto postDto = PostDto.builder().url(url).category(category).comment(comment).build();
+		PostDto postDto = PostDto.builder().url(url).category(category).comment(comment).personalTitle("").build();
 		postDto = postService.saveNewPost(postDto, 1L);
 		
 		String sourceOf = postDto.getSourceOf();

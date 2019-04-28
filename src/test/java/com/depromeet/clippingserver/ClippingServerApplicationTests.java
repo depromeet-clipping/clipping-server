@@ -30,6 +30,7 @@ public class ClippingServerApplicationTests {
         Post post = postRepository.save(Post.builder()
                 .title("제목")
                 .url("URL")
+                .personalTitle("")
                 .build());
 
         Assert.assertTrue(post.getCreatedDate().isAfter(now));
