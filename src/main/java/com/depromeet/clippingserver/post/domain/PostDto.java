@@ -29,6 +29,10 @@ public class PostDto {
 	private String title;
 
 	@NotNull
+	@ApiModelProperty(example = "personal title", value = "사용자 정의 타이틀",required = true)
+	private String personalTitle;
+
+	@NotNull
 	@ApiModelProperty(example = "http://www.smaple.com", value = "신문기사 url을 입력해주세요.", required = true)
 	private String url;
 
@@ -58,6 +62,7 @@ public class PostDto {
 		CategoryDto categorydto = categoryopt.map(CategoryDto::fromEntity).orElse(null);
 		return PostDto.builder().id(post.getId()).title(post.getTitle()).url(post.getUrl()).comment(post.getComment())
 				.thumnailLink(post.getThumbnailImgLink())
+				.personalTitle(post.getPersonalTitle())
 				.sourceOf(post.getSourceOf()).isBookmark(post.isBookmark()).category(categorydto)
 				.createdDate(post.getCreatedDate()).updatedDate(post.getUpdatedDate()).build();
 	}
