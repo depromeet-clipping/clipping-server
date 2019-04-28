@@ -1,19 +1,20 @@
 package com.depromeet.clippingserver.post.domain;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import org.jsoup.Connection;
-import org.jsoup.select.Elements;
-
 import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jsoup.Connection;
+import org.jsoup.select.Elements;
+
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @Builder
@@ -21,14 +22,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostDto {
 
+	@ApiModelProperty(hidden = true)
 	private Long id;
+
+	@ApiModelProperty(hidden = true)
 	private String title;
+
+	@NotNull
+	@ApiModelProperty(example = "http://www.smaple.com", value = "신문기사 url을 입력해주세요.", required = true)
 	private String url;
-	private String comment;
-	private String sourceOf;
-	private String thumnailLink;
+
 	private boolean isBookmark;
+
+	@ApiModelProperty(example = "", hidden = true)
+	@JsonIgnore
+	private String comment;
+
+	@ApiModelProperty(hidden = true)
+	private String sourceOf;
+
+	@ApiModelProperty(hidden = true)
+	private String thumnailLink;
+
+
+	@ApiModelProperty(hidden = true)
 	private LocalDateTime createdDate;
+
+	@ApiModelProperty(hidden = true)
 	private LocalDateTime updatedDate;
 
 	private CategoryDto category;
