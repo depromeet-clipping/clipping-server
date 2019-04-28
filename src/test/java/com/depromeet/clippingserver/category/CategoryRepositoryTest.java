@@ -124,7 +124,7 @@ public class CategoryRepositoryTest {
 		// given
 		ArrayList<Post> posts = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-			posts.add(Post.builder().title("title").url("naver.com").comment("한국").sourceOf("naver").userId(USER_ID)
+			posts.add(Post.builder().title("title").url("naver.com").comment("한국").sourceOf("naver").personalTitle("").userId(USER_ID)
 					.build());
 		}
 		Category category = Category.builder().name("연예기사").orderNo(1).user(User.builder().id(USER_ID).build()).build();

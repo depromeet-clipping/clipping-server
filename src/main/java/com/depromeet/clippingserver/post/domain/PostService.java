@@ -40,6 +40,7 @@ public class PostService {
 		}
 		Post post = Post.builder().comment(postDto.getComment()).url(url).sourceOf(postDto.getSourceOf())
 				.category(Category.builder().id(postDto.getCategory().getId()).build())
+				.personalTitle(postDto.getPersonalTitle())
 				.thumbnailImgLink(postDto.getThumnailLink()).title(postDto.getTitle()).userId(userId).build();
 		Post re = postRepository.save(post);
 		re.addCategory(categoryRepository.findById(re.getCategory().getId()).get());
