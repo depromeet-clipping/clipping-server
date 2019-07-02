@@ -2,6 +2,7 @@ package com.depromeet.clippingserver.post;
 
 import static org.junit.Assert.assertEquals;
 
+import com.depromeet.clippingserver.post.domain.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.depromeet.clippingserver.category.domain.Category;
 import com.depromeet.clippingserver.category.domain.CategoryDto;
 import com.depromeet.clippingserver.category.domain.CategoryRepository;
-import com.depromeet.clippingserver.post.domain.GetAllPostsResponse;
-import com.depromeet.clippingserver.post.domain.PostDto;
-import com.depromeet.clippingserver.post.domain.PostService;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest @ActiveProfiles("test")
@@ -26,7 +26,10 @@ public class PostServiceTest {
 	
 	@Autowired
 	private PostService postService;
-	
+
+	@Autowired
+	private PostRepository postRepository;
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 
@@ -63,6 +66,19 @@ public class PostServiceTest {
 		String keyword = "";
 		GetAllPostsResponse posts = postService.searchPost(userId, keyword, pageReq);
 		assertEquals(5, posts.getPosts().size());
+	}
+
+	@Test
+	public void testSearchPersonalTitle(){
+		List<Post> aPerson = postRepository.findByUserIdAndPersonalTitleContainingAndDeletedFalse(1L, "개인");
+		Post post = aPerson.get(0);
+		assertEquals("테스트 개인 제목", post.getPersonalTitle());
+
+		List<Post> somePost = postRepository.findByUserIdAndPersonalTitleContainingAndDeletedFalse(1L, "한국인");
+		assertEquals(3, somePost.size());
+
+		List<Post> somePost2 = postRepository.findByUserIdAndPersonalTitleContainingAndDeletedFalse(1L, "한국");
+		assertEquals(4, somePost2.size());
 	}
 	
 	@Test
