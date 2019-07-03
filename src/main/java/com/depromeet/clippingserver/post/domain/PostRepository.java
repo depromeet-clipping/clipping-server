@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<Post> findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 	
-	Page<Post> findByUserIdAndTitleContainingIgnoreCaseAndCommentContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
+	Page<Post> findByUserIdAndTitleContainingIgnoreCaseAndPersonalTitleContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String personalTitle, Pageable pageable);
 
-	Page<Post> findByUserIdAndTitleContainingIgnoreCaseOrCommentContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String comment, Pageable pageable);
+	Page<Post> findByUserIdAndTitleContainingIgnoreCaseOrPersonalTitleContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String personalTitle, Pageable pageable);
 	
 	Page<Post> findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 
-	List<Post> findByUserIdAndCommentContainingAndDeletedFalse(Long userId, String comment);
+	List<Post> findByUserIdAndPersonalTitleContainingAndDeletedFalse(Long userId, String personalTitle);
 
 	@Query("update Post p set p.category.id = :categoryId where p.id = :postId")
 	@Modifying
